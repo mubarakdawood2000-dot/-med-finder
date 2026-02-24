@@ -3,183 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ميد-إكس العالمي | MED-X Global</title>
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚕️</text></svg>">
-
-    <title>الباحث الطبي المعتمد | MedSearch Global</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌐</text></svg>">
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 
     <style>
-        /* --- 2. التصميم المتكامل (CSS) --- */
         :root {
-            --medical-blue: #0056b3;
-            --light-blue: #e3f2fd;
-            --success-green: #2ecc71;
-            --text-main: #2c3e50;
+            --primary: #007bff;
+            --dark-bg: #0f172a;
+            --light-bg: #f8fafc;
+            --card-light: #ffffff;
+            --card-dark: #1e293b;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
+        /* تنسيق عام */
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: #f8f9fa;
             margin: 0;
-            color: var(--text-main);
-            line-height: 1.6;
+            background-color: var(--light-bg);
+            color: #334155;
+            transition: var(--transition);
         }
 
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: #f1f5f9;
+        }
+
+        /* الهيدر */
         header {
-            background: white;
-            padding: 40px 20px;
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+            padding: 60px 20px;
             text-align: center;
-            border-bottom: 4px solid var(--medical-blue);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            color: white;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0% 100%);
         }
 
-        .search-area {
-            max-width: 650px;
-            margin: 30px auto;
+        .search-wrapper {
+            max-width: 700px;
+            margin: -40px auto 20px;
+            padding: 0 20px;
             display: flex;
             gap: 10px;
-            padding: 0 15px;
         }
 
-        input[type="text"] {
+        input {
             flex: 1;
-            padding: 15px 25px;
-            border: 2px solid #ddd;
+            padding: 18px 25px;
             border-radius: 50px;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             font-size: 16px;
             outline: none;
-            transition: 0.3s;
         }
 
-        input[type="text"]:focus { border-color: var(--medical-blue); box-shadow: 0 0 8px rgba(0,86,179,0.2); }
-
-        button {
-            padding: 0 35px;
-            background-color: var(--medical-blue);
-            color: white;
-            border: none;
+        button.search-btn {
+            padding: 15px 35px;
             border-radius: 50px;
+            border: none;
+            background: #22c55e;
+            color: white;
             font-weight: bold;
             cursor: pointer;
-            transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);
+            transition: var(--transition);
         }
 
-        button:hover { background-color: #003d7a; transform: translateY(-2px); }
+        button.search-btn:hover { transform: scale(1.05); background: #16a34a; }
 
-        .container { max-width: 850px; margin: auto; padding: 20px; }
+        /* أزرار التحكم */
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .control-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: none;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* النتائج */
+        .container { max-width: 900px; margin: 40px auto; padding: 20px; }
 
         .result-card {
-            background: white;
+            background: var(--card-light);
             padding: 25px;
-            margin-bottom: 20px;
-            border-radius: 15px;
-            border-right: 10px solid var(--medical-blue);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            animation: fadeIn 0.5s ease;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border-right: 6px solid var(--primary);
+            transition: var(--transition);
+            animation: fadeIn 0.5s ease forwards;
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .dark-mode .result-card { background: var(--card-dark); border-right-color: #38bdf8; }
 
-        .result-card h3 a { color: var(--medical-blue); text-decoration: none; font-size: 19px; }
-        .result-card p { font-size: 14px; color: #7f8c8d; margin: 10px 0; }
+        .result-card h3 a { color: var(--primary); text-decoration: none; }
+        .dark-mode .result-card h3 a { color: #38bdf8; }
 
-        .loader { text-align: center; display: none; padding: 30px; }
-        .spinner {
-            width: 40px; height: 40px; border: 4px solid #f3f3f3;
-            border-top: 4px solid var(--medical-blue);
-            border-radius: 50%; animation: spin 1s linear infinite;
-            margin: auto;
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* مترجم جوجل */
+        #google_translate_element {
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .loader {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
         }
 
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        footer { background: #2c3e50; color: white; text-align: center; padding: 40px 20px; margin-top: 50px; }
-        .disclaimer { font-size: 12px; color: #bdc3c7; max-width: 600px; margin: 10px auto; border-top: 1px solid #444; padding-top: 15px; }
+        footer { text-align: center; padding: 50px; opacity: 0.8; font-size: 13px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <span style="font-size: 50px;">⚕️</span>
-        <h1>محرك البحث الطبي العالمي</h1>
-        <p>وصول آمن ومباشر لأحدث الأبحاث العلمية الموثقة</p>
-
-        <div class="search-area">
-            <input type="text" id="searchInput" placeholder="ابحث عن تشخيص أو دواء (مثال: Diabetes)...">
-            <button onclick="medicalSearch()">بحث</button>
-        </div>
-    </header>
-
-    <div class="loader" id="loader">
-        <div class="spinner"></div>
-        <p>جاري فحص المصادر العلمية...</p>
+    <div class="controls">
+        <button class="control-btn" onclick="toggleDarkMode()">🌓</button>
     </div>
 
-    <main class="container" id="results">
-        <div style="text-align:center; color:#95a5a6; margin-top:50px;">
-            <p>مرحباً بك. محرك البحث هذا متصل مباشرة بالمكتبة الوطنية الأمريكية للطب.</p>
-        </div>
-    </main>
+    <header>
+        <h1>MED-X Global 🧬</h1>
+        <p>البحث الطبي العالمي بجميع اللغات</p>
+    </header>
+
+    <div class="search-wrapper">
+        <input type="text" id="searchInput" placeholder="ابحث بأي لغة.. مثال: السكري أو Diabetes">
+        <button class="search-btn" onclick="runGlobalSearch()">بحث ذكي</button>
+    </div>
+
+    <div id="google_translate_element"></div>
+
+    <div class="loader" id="loader"></div>
+
+    <main class="container" id="resultsArea"></main>
 
     <footer>
-        <p>جميع البيانات مستخرجة عبر PubMed API</p>
-        <div class="disclaimer">
-            ⚠️ <strong>إخلاء مسؤولية:</strong> هذا الموقع هو أداة تقنية مخصصة للبحث العلمي والأكاديمي فقط. النتائج المعروضة لا تغني عن زيارة الطبيب المختص ولا يجب استخدامها للتشخيص الذاتي.
-        </div>
-        <p style="font-size: 11px; margin-top: 20px;">© 2026 محرك البحث الطبي المدمج - استضافة GitHub</p>
+        <p>⚠️ تحذير: هذا الموقع للبحث الأكاديمي فقط. لا تعتمد على النتائج كبديل للاستشارة الطبية.</p>
+        <p>© 2026 جميع اللغات مدعومة عبر نظام الترجمة المدمج</p>
     </footer>
 
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'ar,en,fr,es,de,tr,it,ru,zh-CN',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
     <script>
-        /* --- 3. البرمجة الذكية (JavaScript) --- */
-        async function medicalSearch() {
+        // 1. تبديل الوضع الداكن
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+        }
+
+        // 2. البحث الذكي العابر للغات
+        async function runGlobalSearch() {
             const query = document.getElementById('searchInput').value;
-            const container = document.getElementById('results');
+            const area = document.getElementById('resultsArea');
             const loader = document.getElementById('loader');
 
-            if (!query) return alert("لطفاً، أدخل كلمة للبحث");
+            if (!query) return alert("الرجاء إدخال كلمة البحث");
 
-            container.innerHTML = '';
+            area.innerHTML = '';
             loader.style.display = 'block';
 
             try {
-                // البحث عن المعرفات
-                const res = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${query}&retmode=json&retmax=10`);
-                const data = await res.json();
-                const ids = data.esearchresult.idlist;
+                // خطوة الترجمة للإنجليزية (لأن PubMed لا يفهم إلا الإنجليزية)
+                const translateRes = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=${encodeURI(query)}`);
+                const transData = await translateRes.json();
+                const englishTerm = transData[0][0][0];
+
+                // البحث في PubMed
+                const searchRes = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?db=pubmed&term=${englishTerm}&retmode=json&retmax=10`);
+                const searchData = await searchRes.json();
+                const ids = searchData.esearchresult.idlist;
 
                 if (ids.length === 0) {
                     loader.style.display = 'none';
-                    container.innerHTML = '<div class="result-card">لم يتم العثور على أبحاث مطابقة. حاول البحث بمصطلحات طبية إنجليزية.</div>';
+                    area.innerHTML = '<p style="text-align:center;">لم نجد نتائج. حاول تغيير صياغة البحث.</p>';
                     return;
                 }
 
                 // جلب التفاصيل
-                const detailRes = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${ids.join(',')}&retmode=json`);
-                const detailData = await detailRes.json();
+                const detailsRes = await fetch(`https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?db=pubmed&id=${ids.join(',')}&retmode=json`);
+                const detailsData = await detailsRes.json();
 
                 loader.style.display = 'none';
 
-                // عرض النتائج
                 ids.forEach(id => {
-                    const article = detailData.result[id];
-                    container.innerHTML += `
+                    const item = detailsData.result[id];
+                    area.innerHTML += `
                         <div class="result-card">
-                            <h3><a href="https://pubmed.ncbi.nlm.nih.gov/${id}/" target="_blank">${article.title}</a></h3>
-                            <p><strong>المصدر:</strong> ${article.source} | 📅 <strong>التاريخ:</strong> ${article.pubdate}</p>
-                            <span style="font-size:12px; color:var(--medical-blue)">✓ بحث معتمد موثق</span>
+                            <h3><a href="https://pubmed.ncbi.nlm.nih.gov/${id}/" target="_blank">${item.title}</a></h3>
+                            <p><strong>المصدر:</strong> ${item.source} | ${item.pubdate}</p>
+                            <p style="font-size:12px; color:var(--primary)">رقم المرجع: ${id}</p>
                         </div>
                     `;
                 });
-            } catch (err) {
+
+            } catch (error) {
                 loader.style.display = 'none';
-                container.innerHTML = '<p style="color:red; text-align:center;">حدث خطأ أثناء جلب البيانات. تأكد من اتصالك بالإنترنت.</p>';
+                area.innerHTML = '<p style="color:red; text-align:center;">حدث خطأ في الاتصال. حاول مرة أخرى.</p>';
             }
         }
 
-        // تشغيل البحث بالضغط على Enter
-        document.getElementById("searchInput").addEventListener("keypress", (e) => { if(e.key === "Enter") medicalSearch(); });
+        // البحث عند الضغط على Enter
+        document.getElementById("searchInput").addEventListener("keypress", (e) => { if(e.key === "Enter") runGlobalSearch(); });
     </script>
 </body>
 </html>
